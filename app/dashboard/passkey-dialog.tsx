@@ -29,14 +29,13 @@ export function PasskeyRegistrationDialog() {
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    console.log("formData", formData);
     if (!formData.get("name")) {
       alert("Please provide a name for your passkey");
       return;
     }
     const { data, error } = await authClient.passkey.addPasskey({
       name: formData.get("name") as string,
-      authenticatorAttachment: "cross-platform",
+      authenticatorAttachment: "platform",
     });
 
     console.log({ data, error });
