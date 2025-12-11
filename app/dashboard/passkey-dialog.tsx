@@ -21,11 +21,13 @@ import {
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export function PasskeyRegistrationDialog() {
   const { data: session } = authClient.useSession();
   const [open, setOpen] = useState(false);
-
+  const router = useRouter();
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
@@ -38,7 +40,15 @@ export function PasskeyRegistrationDialog() {
       authenticatorAttachment: "platform",
     });
 
-    console.log({ data, error });
+    if (error) {
+      toast.error(`Error adding passkey: ${error.message}`);
+    }
+
+    if (data) {
+      toast.success("Passkey added successfully");
+      setOpen(false);
+      router.refresh();
+    }
   };
 
   useEffect(() => {

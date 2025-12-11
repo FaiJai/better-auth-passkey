@@ -3,12 +3,14 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { SignoutButton } from "./signout-button";
 import { PasskeyRegistrationDialog } from "./passkey-dialog";
+import { PasskeyList } from "./passkey-list";
 
 export default async function Dashboard() {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) {
     redirect("/");
   }
+  const passkeys = await auth.api.listPasskeys({ headers: await headers() });
 
   const user = session.user;
 
@@ -18,6 +20,7 @@ export default async function Dashboard() {
         <h1>Dashboard for {user.email}</h1>
         <SignoutButton />
         <PasskeyRegistrationDialog />
+        <PasskeyList passkeys={passkeys} />
       </div>
     </div>
   );
